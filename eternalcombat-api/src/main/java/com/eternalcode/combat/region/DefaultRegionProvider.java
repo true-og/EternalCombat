@@ -22,6 +22,11 @@ public class DefaultRegionProvider implements RegionProvider {
         return this.contains(min, max, location.getX(), location.getZ());
     }
 
+    @Override
+    public Region getRegion(Location location) {
+        return null;
+    }
+
     public boolean contains(Point min, Point max, double x, double z) {
         return x >= min.x() && x < max.x()
             && z >= min.z() && z < max.z();

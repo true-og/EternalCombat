@@ -47,14 +47,14 @@ public class RegionController implements Listener {
                 return;
             }
 
-            Location playerLocation = player.getLocation().subtract(player.getWorld().getSpawnLocation());
-            double distance = playerLocation.distance(player.getWorld().getSpawnLocation());
-            Vector knockback = new Vector(0, 3, 0).multiply(this.pluginConfig.settings.blockedRegionKnockMultiplier / distance);
-            Vector vector = playerLocation.toVector().add(knockback);
+            Vector direction = locationFrom.toVector().subtract(locationTo.toVector()).normalize();
+            Vector knockback = direction.multiply(this.pluginConfig.settings.blockedRegionKnockMultiplier);
 
-            player.setVelocity(vector);
+            player.setVelocity(knockback);
 
             this.announcer.sendMessage(player, this.pluginConfig.messages.cantEnterOnRegion);
+            event.setCancelled(true);
         }
+
     }
 }

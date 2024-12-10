@@ -34,9 +34,9 @@ If the player is not in combat, the placeholders will return an empty string.
 If combat was not caused by other player, opponent placeholders will return empty string.
 
 ## Building
-Build EternalCombat using:
+Build EternalCombat for 1.19.4 using:
 
-`./gradlew shadowJar`
+`./gradlew build`
 
 ### Permissions for EternalCombat
 

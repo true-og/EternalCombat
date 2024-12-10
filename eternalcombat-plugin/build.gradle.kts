@@ -23,12 +23,12 @@ bukkit {
 
 tasks {
     runServer {
-        minecraftVersion("1.21.1")
+        minecraftVersion("1.19.4")
     }
 }
 
 tasks.shadowJar {
-    archiveFileName.set("EternalCombat v${project.version}.jar")
+    archiveFileName.set("EternalCombat-${project.version}.jar")
 
     dependsOn("test")
 
@@ -58,4 +58,19 @@ tasks.shadowJar {
     ).forEach { pack ->
         relocate(pack, "$prefix.$pack")
     }
+}
+
+tasks.named("build").configure {
+    dependsOn("shadowJar")
+}
+
+tasks.register("runCopyJarScript", Exec::class) {
+    group = "build"
+    description = "Runs the copyjar.sh script after build completion."
+    workingDir(rootDir)
+    commandLine("sh", "copyjar.sh", project.version.toString())
+}
+
+tasks.named("build") {
+    finalizedBy("runCopyJarScript")
 }

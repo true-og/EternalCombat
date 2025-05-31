@@ -1,7 +1,7 @@
 plugins {
     `eternalcombat-java`
     `eternalcombat-repositories`
-
+    `eclipse`
     id("net.minecrell.plugin-yml.bukkit")
     id("io.github.goooler.shadow")
     id("xyz.jpenilla.run-paper")

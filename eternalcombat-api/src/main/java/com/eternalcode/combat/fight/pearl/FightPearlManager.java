@@ -2,7 +2,6 @@ package com.eternalcode.combat.fight.pearl;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.util.UUID;
@@ -15,8 +14,8 @@ public class FightPearlManager {
     public FightPearlManager(FightPearlSettings pearlSettings) {
         this.pearlSettings = pearlSettings;
         this.pearlDelays = Caffeine.newBuilder()
-            .expireAfterWrite(pearlSettings.pearlThrowDelay)
-            .build();
+                .expireAfterWrite(pearlSettings.pearlThrowDelay)
+                .build();
     }
 
     public void markDelay(UUID uuid) {

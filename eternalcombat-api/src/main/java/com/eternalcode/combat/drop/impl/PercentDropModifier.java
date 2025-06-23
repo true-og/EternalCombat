@@ -8,9 +8,8 @@ import com.eternalcode.combat.drop.DropType;
 import com.eternalcode.combat.util.InventoryUtil;
 import com.eternalcode.combat.util.MathUtil;
 import com.eternalcode.combat.util.RemoveItemResult;
-import org.bukkit.inventory.ItemStack;
-
 import java.util.List;
+import org.bukkit.inventory.ItemStack;
 
 public class PercentDropModifier implements DropModifier {
 

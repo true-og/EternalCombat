@@ -1,18 +1,17 @@
 package com.eternalcode.combat.fight;
 
-import com.eternalcode.combat.fight.event.CauseOfUnTag;
 import com.eternalcode.combat.config.implementation.PluginConfig;
 import com.eternalcode.combat.fight.bossbar.FightBossBarService;
+import com.eternalcode.combat.fight.event.CauseOfUnTag;
 import com.eternalcode.combat.notification.Notification;
 import com.eternalcode.combat.notification.NotificationAnnouncer;
 import com.eternalcode.combat.notification.implementation.BossBarNotification;
 import com.eternalcode.combat.util.DurationUtil;
+import java.time.Duration;
+import java.util.UUID;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import panda.utilities.text.Formatter;
-
-import java.time.Duration;
-import java.util.UUID;
 
 public class FightTask implements Runnable {
 
@@ -22,7 +21,12 @@ public class FightTask implements Runnable {
     private final FightBossBarService bossBarService;
     private final NotificationAnnouncer announcer;
 
-    public FightTask(Server server, PluginConfig config, FightManager fightManager, FightBossBarService bossBarService, NotificationAnnouncer announcer) {
+    public FightTask(
+            Server server,
+            PluginConfig config,
+            FightManager fightManager,
+            FightBossBarService bossBarService,
+            NotificationAnnouncer announcer) {
         this.server = server;
         this.config = config;
         this.fightManager = fightManager;
@@ -47,8 +51,7 @@ public class FightTask implements Runnable {
             }
 
             Duration remaining = fightTag.getRemainingDuration();
-            Formatter formatter = new Formatter()
-                    .register("{TIME}", DurationUtil.format(remaining));
+            Formatter formatter = new Formatter().register("{TIME}", DurationUtil.format(remaining));
 
             Notification combatNotification = this.config.messages.combatNotification;
 
@@ -56,7 +59,8 @@ public class FightTask implements Runnable {
         }
     }
 
-    private void sendFightNotification(Player player, FightTag fightTag, Notification notification, Formatter formatter) {
+    private void sendFightNotification(
+            Player player, FightTag fightTag, Notification notification, Formatter formatter) {
         if (notification instanceof BossBarNotification bossBarNotification) {
             this.bossBarService.send(player, fightTag, bossBarNotification, formatter);
             return;

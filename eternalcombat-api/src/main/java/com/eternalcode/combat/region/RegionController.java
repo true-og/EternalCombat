@@ -19,7 +19,11 @@ public class RegionController implements Listener {
     private final FightManager fightManager;
     private final PluginConfig pluginConfig;
 
-    public RegionController(NotificationAnnouncer announcer, RegionProvider regionProvider, FightManager fightManager, PluginConfig pluginConfig) {
+    public RegionController(
+            NotificationAnnouncer announcer,
+            RegionProvider regionProvider,
+            FightManager fightManager,
+            PluginConfig pluginConfig) {
         this.announcer = announcer;
         this.regionProvider = regionProvider;
         this.fightManager = fightManager;
@@ -56,9 +60,9 @@ public class RegionController implements Listener {
 
             Vector knockbackVector = new Vector(subtract.getX(), 0, subtract.getZ()).normalize();
             Vector configuredVector = new Vector(
-                this.pluginConfig.settings.blockedRegionKnockMultiplier,
-                0.5,
-                this.pluginConfig.settings.blockedRegionKnockMultiplier);
+                    this.pluginConfig.settings.blockedRegionKnockMultiplier,
+                    0.5,
+                    this.pluginConfig.settings.blockedRegionKnockMultiplier);
 
             player.setVelocity(knockbackVector.multiply(configuredVector));
 

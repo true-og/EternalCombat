@@ -2,12 +2,11 @@ package com.eternalcode.combat.fight.pearl;
 
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
-
 import java.time.Duration;
 
 public class FightPearlSettings extends OkaeriConfig {
 
-    @Comment({ "# Is pearl damage to be enabled?", "# This will work globally" })
+    @Comment({"# Is pearl damage to be enabled?", "# This will work globally"})
     public boolean pearlThrowDamageEnabled = true;
 
     @Comment("# Set true, If you want to lock pearls during the combat")
@@ -25,5 +24,4 @@ public class FightPearlSettings extends OkaeriConfig {
 
     @Comment("# Message sent when player tries to throw ender pearl, but has delay")
     public String pearlThrowBlockedDelayDuringCombat = "&cYou must wait {TIME} before next throw!";
-
 }

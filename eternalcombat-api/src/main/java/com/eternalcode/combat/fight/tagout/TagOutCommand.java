@@ -7,12 +7,11 @@ import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.command.execute.Execute;
 import dev.rollczi.litecommands.command.permission.Permission;
 import dev.rollczi.litecommands.command.route.Route;
-import org.bukkit.entity.Player;
-import panda.utilities.text.Formatter;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.util.UUID;
+import org.bukkit.entity.Player;
+import panda.utilities.text.Formatter;
 
 @Route(name = "tagout", aliases = "tagimmunity")
 public class TagOutCommand {
@@ -32,9 +31,8 @@ public class TagOutCommand {
     void tagout(Player sender, @Arg Duration time) {
         UUID targetUniqueId = sender.getUniqueId();
 
-        Formatter formatter = new Formatter()
-            .register("{PLAYER}", sender.getName())
-            .register("{TIME}", DurationUtil.format(time));
+        Formatter formatter =
+                new Formatter().register("{PLAYER}", sender.getName()).register("{TIME}", DurationUtil.format(time));
 
         this.fightTagOutService.tagOut(targetUniqueId, time);
 
@@ -51,8 +49,8 @@ public class TagOutCommand {
         Duration remaining = Duration.between(now, now.plus(time));
 
         Formatter formatter = new Formatter()
-            .register("{PLAYER}", target.getName())
-            .register("{TIME}", DurationUtil.format(remaining));
+                .register("{PLAYER}", target.getName())
+                .register("{TIME}", DurationUtil.format(remaining));
 
         this.fightTagOutService.tagOut(targetUniqueId, time);
 
@@ -70,8 +68,7 @@ public class TagOutCommand {
 
         this.fightTagOutService.unTagOut(targetUniqueId);
 
-        Formatter formatter = new Formatter()
-            .register("{PLAYER}", target.getName());
+        Formatter formatter = new Formatter().register("{PLAYER}", target.getName());
 
         if (!targetUniqueId.equals(sender.getUniqueId())) {
             String adminUnTagOutFormat = formatter.format(this.config.messages.admin.adminTagOutOff);
@@ -91,4 +88,3 @@ public class TagOutCommand {
         this.announcer.sendMessage(sender, this.config.messages.admin.playerTagOutOff);
     }
 }
-

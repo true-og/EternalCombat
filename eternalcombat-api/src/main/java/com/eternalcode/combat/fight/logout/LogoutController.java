@@ -17,8 +17,11 @@ public class LogoutController implements Listener {
     private final NotificationAnnouncer announcer;
     private final PluginConfig config;
 
-
-    public LogoutController(FightManager fightManager, LogoutService logoutService, NotificationAnnouncer announcer, PluginConfig config) {
+    public LogoutController(
+            FightManager fightManager,
+            LogoutService logoutService,
+            NotificationAnnouncer announcer,
+            PluginConfig config) {
         this.fightManager = fightManager;
         this.logoutService = logoutService;
         this.announcer = announcer;
@@ -36,12 +39,9 @@ public class LogoutController implements Listener {
         this.logoutService.punishForLogout(player);
         player.setHealth(0.0);
 
-        Formatter formatter = new Formatter()
-                .register("{PLAYER}", player.getName());
+        Formatter formatter = new Formatter().register("{PLAYER}", player.getName());
 
         String format = formatter.format(this.config.messages.playerLoggedOutDuringCombat);
         this.announcer.broadcast(format);
-
     }
-
 }

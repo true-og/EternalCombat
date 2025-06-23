@@ -1,6 +1,8 @@
 package com.eternalcode.combat.drop;
 
 import com.eternalcode.combat.fight.FightManager;
+import java.util.List;
+import java.util.UUID;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -10,9 +12,6 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.util.List;
-import java.util.UUID;
-
 public class DropController implements Listener {
 
     private final DropManager dropManager;
@@ -20,7 +19,11 @@ public class DropController implements Listener {
     private final DropSettings dropSettings;
     private final FightManager fightManager;
 
-    public DropController(DropManager dropManager, DropKeepInventoryManager keepInventoryManager, DropSettings dropSettings, FightManager fightManager) {
+    public DropController(
+            DropManager dropManager,
+            DropKeepInventoryManager keepInventoryManager,
+            DropSettings dropSettings,
+            FightManager fightManager) {
         this.dropManager = dropManager;
         this.keepInventoryManager = keepInventoryManager;
         this.dropSettings = dropSettings;
@@ -39,11 +42,11 @@ public class DropController implements Listener {
         List<ItemStack> drops = event.getDrops();
 
         Drop drop = Drop.builder()
-            .player(player)
-            .killer(player.getKiller())
-            .droppedItems(drops)
-            .droppedExp(player.getTotalExperience())
-            .build();
+                .player(player)
+                .killer(player.getKiller())
+                .droppedItems(drops)
+                .droppedExp(player.getTotalExperience())
+                .build();
 
         DropResult result = this.dropManager.modify(dropType, drop);
 
@@ -69,11 +72,10 @@ public class DropController implements Listener {
         if (this.keepInventoryManager.hasItems(playerUniqueId)) {
             PlayerInventory playerInventory = player.getInventory();
 
-            ItemStack[] itemsToGive = this.keepInventoryManager.nextItems(playerUniqueId)
-                .toArray(new ItemStack[0]);
+            ItemStack[] itemsToGive =
+                    this.keepInventoryManager.nextItems(playerUniqueId).toArray(new ItemStack[0]);
 
             playerInventory.addItem(itemsToGive);
         }
     }
-
 }

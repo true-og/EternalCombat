@@ -10,5 +10,4 @@ public interface RegionProvider {
     default boolean isInRegion(Location location) {
         return getRegion(location).isPresent();
     }
-
 }

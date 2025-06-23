@@ -15,11 +15,13 @@ public class DropManager {
         DropType dropType = dropModifier.getDropType();
 
         if (dropType == null) {
-            throw new RuntimeException("Drop type cannot be null! '%s'".formatted(dropModifier.getClass().getSimpleName()));
+            throw new RuntimeException("Drop type cannot be null! '%s'"
+                    .formatted(dropModifier.getClass().getSimpleName()));
         }
 
         if (dropType == DropType.UNCHANGED) {
-            throw new RuntimeException("You cannot register DropModifier for this type '%s'".formatted(dropType.name()));
+            throw new RuntimeException(
+                    "You cannot register DropModifier for this type '%s'".formatted(dropType.name()));
         }
 
         this.modifiers.put(dropType, dropModifier);
@@ -32,5 +34,4 @@ public class DropManager {
 
         return this.modifiers.get(dropType).modifyDrop(drop);
     }
-
 }

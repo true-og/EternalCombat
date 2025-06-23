@@ -10,12 +10,11 @@ import com.eternalcode.combat.fight.logout.LogoutService;
 import com.eternalcode.combat.util.InventoryUtil;
 import com.eternalcode.combat.util.MathUtil;
 import com.eternalcode.combat.util.RemoveItemResult;
+import java.util.List;
+import java.util.Optional;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.List;
-import java.util.Optional;
 
 public class PlayersHealthDropModifier implements DropModifier {
 
@@ -34,12 +33,12 @@ public class PlayersHealthDropModifier implements DropModifier {
 
     @Override
     public DropResult modifyDrop(Drop drop) {
-        Optional<Logout> logoutOptional = this.logoutService.nextLogoutFor(drop.getPlayer().getUniqueId());
+        Optional<Logout> logoutOptional =
+                this.logoutService.nextLogoutFor(drop.getPlayer().getUniqueId());
 
         if (logoutOptional.isEmpty()) {
             return null;
         }
-
 
         Logout logout = logoutOptional.get();
         Player player = drop.getPlayer();

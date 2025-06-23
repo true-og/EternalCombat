@@ -4,10 +4,9 @@ import com.eternalcode.gitcheck.GitCheck;
 import com.eternalcode.gitcheck.GitCheckResult;
 import com.eternalcode.gitcheck.git.GitRepository;
 import com.eternalcode.gitcheck.git.GitTag;
+import java.util.concurrent.CompletableFuture;
 import org.bukkit.plugin.PluginDescriptionFile;
 import panda.std.Lazy;
-
-import java.util.concurrent.CompletableFuture;
 
 public class UpdaterService {
 
@@ -31,5 +30,4 @@ public class UpdaterService {
             return result.isUpToDate();
         });
     }
-
 }

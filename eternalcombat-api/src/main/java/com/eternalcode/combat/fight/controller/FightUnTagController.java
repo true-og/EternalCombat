@@ -1,8 +1,8 @@
 package com.eternalcode.combat.fight.controller;
 
-import com.eternalcode.combat.fight.event.CauseOfUnTag;
 import com.eternalcode.combat.config.implementation.PluginConfig;
 import com.eternalcode.combat.fight.FightManager;
+import com.eternalcode.combat.fight.event.CauseOfUnTag;
 import com.eternalcode.combat.fight.logout.LogoutService;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -54,5 +54,4 @@ public class FightUnTagController implements Listener {
 
         return CauseOfUnTag.DEATH;
     }
-
 }

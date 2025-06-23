@@ -1,9 +1,11 @@
 package com.eternalcode.combat.fight.controller;
 
-import com.eternalcode.combat.config.implementation.PluginConfig;
 import com.eternalcode.combat.WhitelistBlacklistMode;
+import com.eternalcode.combat.config.implementation.PluginConfig;
 import com.eternalcode.combat.fight.FightManager;
 import com.eternalcode.combat.notification.NotificationAnnouncer;
+import java.util.List;
+import java.util.UUID;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -15,9 +17,6 @@ import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
-
-import java.util.List;
-import java.util.UUID;
 import panda.utilities.text.Formatter;
 
 public class FightActionBlockerController implements Listener {
@@ -26,7 +25,8 @@ public class FightActionBlockerController implements Listener {
     private final NotificationAnnouncer announcer;
     private final PluginConfig config;
 
-    public FightActionBlockerController(FightManager fightManager, NotificationAnnouncer announcer, PluginConfig config) {
+    public FightActionBlockerController(
+            FightManager fightManager, NotificationAnnouncer announcer, PluginConfig config) {
         this.fightManager = fightManager;
         this.announcer = announcer;
         this.config = config;
@@ -53,8 +53,8 @@ public class FightActionBlockerController implements Listener {
         boolean isPlacementBlocked = isPlacementBlocked(level);
 
         Formatter formatter = new Formatter()
-            .register("{Y}", this.config.settings.blockPlacingYCoordinate)
-            .register("{MODE}", this.config.settings.blockPlacingModeName);
+                .register("{Y}", this.config.settings.blockPlacingYCoordinate)
+                .register("{MODE}", this.config.settings.blockPlacingModeName);
 
         if (isPlacementBlocked && specificBlocksToPreventPlacing.isEmpty()) {
             event.setCancelled(true);
@@ -71,8 +71,8 @@ public class FightActionBlockerController implements Listener {
 
     private boolean isPlacementBlocked(int level) {
         return this.config.settings.blockPlacingMode == PluginConfig.Settings.BlockPlacingMode.ABOVE
-            ? level > this.config.settings.blockPlacingYCoordinate
-            : level < this.config.settings.blockPlacingYCoordinate;
+                ? level > this.config.settings.blockPlacingYCoordinate
+                : level < this.config.settings.blockPlacingYCoordinate;
     }
 
     @EventHandler
@@ -160,8 +160,7 @@ public class FightActionBlockerController implements Listener {
 
         String command = event.getMessage().split(" ")[0].substring(1).toLowerCase();
 
-        boolean isMatchCommand = this.config.settings.blockedCommands.stream()
-            .anyMatch(command::startsWith);
+        boolean isMatchCommand = this.config.settings.blockedCommands.stream().anyMatch(command::startsWith);
 
         WhitelistBlacklistMode mode = this.config.settings.commandBlockingMode;
 

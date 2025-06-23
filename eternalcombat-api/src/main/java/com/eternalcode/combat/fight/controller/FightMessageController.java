@@ -20,7 +20,12 @@ public class FightMessageController implements Listener {
     private final PluginConfig config;
     private final Server server;
 
-    public FightMessageController(FightManager fightManager, NotificationAnnouncer announcer, FightBossBarService bossBarService, PluginConfig config, Server server) {
+    public FightMessageController(
+            FightManager fightManager,
+            NotificationAnnouncer announcer,
+            FightBossBarService bossBarService,
+            PluginConfig config,
+            Server server) {
         this.fightManager = fightManager;
         this.announcer = announcer;
         this.bossBarService = bossBarService;

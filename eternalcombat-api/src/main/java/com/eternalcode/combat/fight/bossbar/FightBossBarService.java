@@ -3,6 +3,9 @@ package com.eternalcode.combat.fight.bossbar;
 import com.eternalcode.combat.config.implementation.PluginConfig;
 import com.eternalcode.combat.fight.FightTag;
 import com.eternalcode.combat.notification.implementation.BossBarNotification;
+import java.time.Duration;
+import java.util.Optional;
+import java.util.UUID;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.platform.AudienceProvider;
@@ -10,10 +13,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
 import panda.utilities.text.Formatter;
-
-import java.time.Duration;
-import java.util.Optional;
-import java.util.UUID;
 
 public class FightBossBarService {
 
@@ -53,8 +52,9 @@ public class FightBossBarService {
     public void send(Player player, FightTag fightTag, BossBarNotification bossBarNotification, Formatter formatter) {
         UUID playerUniqueId = player.getUniqueId();
 
-        FightBossBar fightBossBar = this.bossBarRegistry.getFightBossBar(playerUniqueId)
-            .orElseGet(() -> this.create(player, bossBarNotification, formatter));
+        FightBossBar fightBossBar = this.bossBarRegistry
+                .getFightBossBar(playerUniqueId)
+                .orElseGet(() -> this.create(player, bossBarNotification, formatter));
 
         if (!this.bossBarRegistry.hasFightBossBar(playerUniqueId)) {
             this.show(player, fightBossBar);

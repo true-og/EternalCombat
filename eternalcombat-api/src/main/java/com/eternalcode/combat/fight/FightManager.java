@@ -1,11 +1,10 @@
 package com.eternalcode.combat.fight;
 
+import com.eternalcode.combat.event.EventCaller;
 import com.eternalcode.combat.fight.event.CauseOfTag;
 import com.eternalcode.combat.fight.event.CauseOfUnTag;
 import com.eternalcode.combat.fight.event.FightTagEvent;
 import com.eternalcode.combat.fight.event.FightUntagEvent;
-import com.eternalcode.combat.event.EventCaller;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;

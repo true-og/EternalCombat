@@ -45,5 +45,4 @@ public class FightTag {
     public UUID getTagger() {
         return this.tagger;
     }
-
 }

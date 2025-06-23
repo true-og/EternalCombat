@@ -30,7 +30,6 @@ public class FightTagPlaceholder extends PlaceholderExpansion {
         return true;
     }
 
-
     @Override
     public @NotNull String getIdentifier() {
         return IDENTIFIER;
@@ -50,26 +49,24 @@ public class FightTagPlaceholder extends PlaceholderExpansion {
     public String onRequest(OfflinePlayer player, String identifier) {
         if (identifier.equals("remaining_seconds")) {
             return this.getFightTag(player)
-                .map(fightTag -> DurationUtil.format(fightTag.getRemainingDuration()))
-                .orElse("");
+                    .map(fightTag -> DurationUtil.format(fightTag.getRemainingDuration()))
+                    .orElse("");
         }
 
         if (identifier.equals("remaining_millis")) {
             return this.getFightTag(player)
-                .map(fightTag -> DurationParser.TIME_UNITS.format(fightTag.getRemainingDuration()))
-                .orElse("");
+                    .map(fightTag -> DurationParser.TIME_UNITS.format(fightTag.getRemainingDuration()))
+                    .orElse("");
         }
 
         if (identifier.equals("opponent")) {
-            return getTagger(player)
-                .map(tagger -> tagger.getName())
-                .orElse("");
+            return getTagger(player).map(tagger -> tagger.getName()).orElse("");
         }
 
         if (identifier.equals("opponent_health")) {
             return getTagger(player)
-                .map(tagger -> String.format("%.2f", tagger.getHealth()))
-                .orElse("");
+                    .map(tagger -> String.format("%.2f", tagger.getHealth()))
+                    .orElse("");
         }
 
         return null;
@@ -77,8 +74,8 @@ public class FightTagPlaceholder extends PlaceholderExpansion {
 
     private @NotNull Optional<Player> getTagger(OfflinePlayer player) {
         return this.getFightTag(player)
-            .map(fightTag -> fightTag.getTagger())
-            .map(taggerId -> this.server.getPlayer(taggerId));
+                .map(fightTag -> fightTag.getTagger())
+                .map(taggerId -> this.server.getPlayer(taggerId));
     }
 
     private Optional<FightTag> getFightTag(OfflinePlayer player) {
@@ -94,5 +91,4 @@ public class FightTagPlaceholder extends PlaceholderExpansion {
 
         return Optional.empty();
     }
-
 }

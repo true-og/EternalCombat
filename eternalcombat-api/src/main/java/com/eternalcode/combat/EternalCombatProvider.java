@@ -27,5 +27,4 @@ public final class EternalCombatProvider {
 
         ETERNAL_COMBAT_API = null;
     }
-
 }

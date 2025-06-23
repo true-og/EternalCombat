@@ -10,15 +10,15 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
+import java.util.List;
 import java.util.Optional;
 import java.util.TreeSet;
 import org.bukkit.Location;
 
-import java.util.List;
-
 public class WorldGuardRegionProvider implements RegionProvider {
 
-    private final RegionContainer regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
+    private final RegionContainer regionContainer =
+            WorldGuard.getInstance().getPlatform().getRegionContainer();
     private final TreeSet<String> regions = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
     private final PluginConfig pluginConfig;
 
@@ -71,5 +71,4 @@ public class WorldGuardRegionProvider implements RegionProvider {
             return new Location(contextLocation.getWorld(), x, contextLocation.getY(), z);
         }
     }
-
 }

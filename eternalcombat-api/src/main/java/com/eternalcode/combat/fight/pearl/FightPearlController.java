@@ -3,6 +3,8 @@ package com.eternalcode.combat.fight.pearl;
 import com.eternalcode.combat.fight.FightManager;
 import com.eternalcode.combat.notification.NotificationAnnouncer;
 import com.eternalcode.combat.util.DurationUtil;
+import java.time.Duration;
+import java.util.UUID;
 import org.bukkit.Material;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Player;
@@ -16,9 +18,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import panda.utilities.text.Formatter;
 
-import java.time.Duration;
-import java.util.UUID;
-
 public class FightPearlController implements Listener {
 
     private final FightPearlSettings settings;
@@ -26,7 +25,11 @@ public class FightPearlController implements Listener {
     private final FightManager fightManager;
     private final FightPearlManager fightPearlManager;
 
-    public FightPearlController(FightPearlSettings settings, NotificationAnnouncer announcer, FightManager fightManager, FightPearlManager fightPearlManager) {
+    public FightPearlController(
+            FightPearlSettings settings,
+            NotificationAnnouncer announcer,
+            FightManager fightManager,
+            FightPearlManager fightPearlManager) {
         this.settings = settings;
         this.announcer = announcer;
         this.fightManager = fightManager;
@@ -67,8 +70,7 @@ public class FightPearlController implements Listener {
 
             Duration remainingPearlDelay = this.fightPearlManager.getRemainingDelay(uniqueId);
 
-            Formatter formatter = new Formatter()
-                .register("{TIME}", DurationUtil.format(remainingPearlDelay));
+            Formatter formatter = new Formatter().register("{TIME}", DurationUtil.format(remainingPearlDelay));
 
             String format = formatter.format(this.settings.pearlThrowBlockedDelayDuringCombat);
             this.announcer.sendMessage(player, format);

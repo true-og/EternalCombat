@@ -1,15 +1,10 @@
 package com.eternalcode.combat.drop;
 
-import org.bukkit.inventory.ItemStack;
-
 import java.util.Collections;
 import java.util.List;
+import org.bukkit.inventory.ItemStack;
 
-public record DropResult(
-    List<ItemStack> droppedItems,
-    List<ItemStack> removedItems,
-    int droppedExp
-) {
+public record DropResult(List<ItemStack> droppedItems, List<ItemStack> removedItems, int droppedExp) {
 
     @Override
     public List<ItemStack> droppedItems() {
@@ -20,5 +15,4 @@ public record DropResult(
     public List<ItemStack> removedItems() {
         return Collections.unmodifiableList(this.removedItems);
     }
-
 }

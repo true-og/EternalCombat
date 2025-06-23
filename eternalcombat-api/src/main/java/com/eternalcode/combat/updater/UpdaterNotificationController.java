@@ -1,6 +1,7 @@
 package com.eternalcode.combat.updater;
 
 import com.eternalcode.combat.config.implementation.PluginConfig;
+import java.util.concurrent.CompletableFuture;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.AudienceProvider;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -9,11 +10,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.util.concurrent.CompletableFuture;
-
 public class UpdaterNotificationController implements Listener {
 
-    private static final String NEW_VERSION_AVAILABLE = "<b><gradient:#8a1212:#fc6b03>EternalCombat:</gradient></b> <color:#fce303>New version of EternalCombat is available, please update!";
+    private static final String NEW_VERSION_AVAILABLE =
+            "<b><gradient:#8a1212:#fc6b03>EternalCombat:</gradient></b> <color:#fce303>New version of EternalCombat is available, please update!";
     private static final String RECEIVE_UPDATES_PERMISSION = "eternalcombat.receiveupdates";
 
     private final UpdaterService updaterService;
@@ -21,7 +21,11 @@ public class UpdaterNotificationController implements Listener {
     private final AudienceProvider audienceProvider;
     private final MiniMessage miniMessage;
 
-    public UpdaterNotificationController(UpdaterService updaterService, PluginConfig pluginConfig, AudienceProvider audienceProvider, MiniMessage miniMessage) {
+    public UpdaterNotificationController(
+            UpdaterService updaterService,
+            PluginConfig pluginConfig,
+            AudienceProvider audienceProvider,
+            MiniMessage miniMessage) {
         this.updaterService = updaterService;
         this.pluginConfig = pluginConfig;
         this.audienceProvider = audienceProvider;
@@ -33,7 +37,8 @@ public class UpdaterNotificationController implements Listener {
         Player player = event.getPlayer();
         Audience audience = this.audienceProvider.player(player.getUniqueId());
 
-        if (!player.hasPermission(RECEIVE_UPDATES_PERMISSION) || !this.pluginConfig.settings.shouldReceivePluginUpdates) {
+        if (!player.hasPermission(RECEIVE_UPDATES_PERMISSION)
+                || !this.pluginConfig.settings.shouldReceivePluginUpdates) {
             return;
         }
 
@@ -51,5 +56,4 @@ public class UpdaterNotificationController implements Listener {
             }
         });
     }
-
 }

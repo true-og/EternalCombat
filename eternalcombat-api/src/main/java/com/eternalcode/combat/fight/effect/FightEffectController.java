@@ -20,7 +20,8 @@ public class FightEffectController implements Listener {
     private final FightManager fightManager;
     private final Server server;
 
-    public FightEffectController(FightEffectSettings settings, FightEffectService effectService, FightManager fightManager, Server server) {
+    public FightEffectController(
+            FightEffectSettings settings, FightEffectService effectService, FightManager fightManager, Server server) {
         this.effectSettings = settings;
         this.effectService = effectService;
         this.fightManager = fightManager;
@@ -39,8 +40,8 @@ public class FightEffectController implements Listener {
             return;
         }
 
-        this.effectSettings.customEffects.forEach((key, value) ->
-            this.effectService.applyCustomEffect(player, key, value));
+        this.effectSettings.customEffects.forEach(
+                (key, value) -> this.effectService.applyCustomEffect(player, key, value));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -69,7 +70,8 @@ public class FightEffectController implements Listener {
             return;
         }
 
-        this.effectSettings.customEffects.forEach((key, value) -> this.effectService.removeCustomEffect(player, key, value));
+        this.effectSettings.customEffects.forEach(
+                (key, value) -> this.effectService.removeCustomEffect(player, key, value));
 
         this.effectService.restoreActiveEffects(player);
     }
@@ -120,5 +122,4 @@ public class FightEffectController implements Listener {
     private boolean isRemovedEffect(PotionEffect newEffect, PotionEffect oldEffect) {
         return newEffect == null && oldEffect != null;
     }
-
 }

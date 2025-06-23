@@ -5,5 +5,4 @@ import org.bukkit.Location;
 public interface Region {
 
     Location getCenter();
-
 }

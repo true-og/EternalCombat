@@ -5,5 +5,4 @@ public interface DropModifier {
     DropType getDropType();
 
     DropResult modifyDrop(Drop drop);
-
 }

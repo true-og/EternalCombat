@@ -29,8 +29,6 @@ public class DefaultRegionProvider implements RegionProvider {
     }
 
     private boolean contains(BlockVector min, BlockVector max, double x, double z) {
-        return x >= min.getX() && x < max.getX()
-            && z >= min.getZ() && z < max.getZ();
+        return x >= min.getX() && x < max.getX() && z >= min.getZ() && z < max.getZ();
     }
-
 }

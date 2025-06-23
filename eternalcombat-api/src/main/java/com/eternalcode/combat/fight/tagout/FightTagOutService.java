@@ -30,5 +30,4 @@ public class FightTagOutService {
 
         return now.isBefore(endTime);
     }
-
 }

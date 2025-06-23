@@ -3,12 +3,15 @@ plugins {
     `eternalcombat-repositories`
     `eclipse`
     id("net.minecrell.plugin-yml.bukkit")
-    id("io.github.goooler.shadow")
+    id("com.gradleup.shadow") version "8.3.6"
     id("xyz.jpenilla.run-paper")
 }
 
+repositories { maven("https://repo.purpurmc.org/snapshots") }
+
 dependencies {
     implementation(project(":eternalcombat-api"))
+    compileOnly("org.purpurmc.purpur:purpur-api:1.19.4-R0.1-SNAPSHOT")
 }
 
 bukkit {
@@ -21,48 +24,32 @@ bukkit {
     version = "${project.version}"
 }
 
-tasks {
-    runServer {
-        minecraftVersion("1.19.4")
-    }
-}
+tasks { runServer { minecraftVersion("1.19.4") } }
 
 tasks.shadowJar {
     archiveFileName.set("EternalCombat-${project.version}.jar")
-
     dependsOn("test")
-
-    exclude(
-        "org/intellij/lang/annotations/**",
-        "org/jetbrains/annotations/**",
-        "META-INF/**",
-        "kotlin/**",
-        "javax/**"
-    )
-
+    exclude("org/intellij/lang/annotations/**", "org/jetbrains/annotations/**", "META-INF/**", "kotlin/**", "javax/**")
     val prefix = "com.eternalcode.combat.libs"
     listOf(
-        "panda.std",
-        "panda.utilities",
-        "org.panda-lang",
-        "eu.okaeri",
-        "net.kyori",
-        "org.bstats",
-        "dev.rollczi.litecommands",
-        "com.eternalcode.gitcheck",
-        "org.json.simple",
-        "org.apache.commons",
-        "javassist",
-        "com.github.benmanes.caffeine",
-        "com.eternalcode.commons"
-    ).forEach { pack ->
-        relocate(pack, "$prefix.$pack")
-    }
+            "panda.std",
+            "panda.utilities",
+            "org.panda-lang",
+            "eu.okaeri",
+            "net.kyori",
+            "org.bstats",
+            "dev.rollczi.litecommands",
+            "com.eternalcode.gitcheck",
+            "org.json.simple",
+            "org.apache.commons",
+            "javassist",
+            "com.github.ben-manes.caffeine",
+            "com.eternalcode.commons",
+        )
+        .forEach { pack -> relocate(pack, "$prefix.$pack") }
 }
 
-tasks.named("build").configure {
-    dependsOn("shadowJar")
-}
+tasks.named("build").configure { dependsOn("shadowJar") }
 
 tasks.register("runCopyJarScript", Exec::class) {
     group = "build"
@@ -71,6 +58,4 @@ tasks.register("runCopyJarScript", Exec::class) {
     commandLine("sh", "copyjar.sh", project.version.toString())
 }
 
-tasks.named("build") {
-    finalizedBy("runCopyJarScript")
-}
+tasks.named("build") { finalizedBy("runCopyJarScript") }

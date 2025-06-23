@@ -27,3 +27,4 @@ sourceSets {
         resources.setSrcDirs(emptyList<String>())
     }
 }
+

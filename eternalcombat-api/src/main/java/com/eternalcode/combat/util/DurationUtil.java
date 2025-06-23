@@ -8,11 +8,11 @@ import java.time.temporal.ChronoUnit;
 public final class DurationUtil {
 
     private static final TemporalAmountParser<Duration> WITHOUT_MILLS = new DurationParser()
-        .withUnit("s", ChronoUnit.SECONDS)
-        .withUnit("m", ChronoUnit.MINUTES)
-        .withUnit("h", ChronoUnit.HOURS)
-        .withUnit("d", ChronoUnit.DAYS)
-        .roundOff(ChronoUnit.MILLIS);
+            .withUnit("s", ChronoUnit.SECONDS)
+            .withUnit("m", ChronoUnit.MINUTES)
+            .withUnit("h", ChronoUnit.HOURS)
+            .withUnit("d", ChronoUnit.DAYS)
+            .roundOff(ChronoUnit.MILLIS);
 
     public DurationUtil() {
         throw new UnsupportedOperationException("This class cannot be instantiated");

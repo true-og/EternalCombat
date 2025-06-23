@@ -1,10 +1,9 @@
 package com.eternalcode.combat.fight.event;
 
+import java.util.UUID;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-
-import java.util.UUID;
 
 public class FightTagEvent extends Event implements Cancellable {
 
@@ -59,5 +58,4 @@ public class FightTagEvent extends Event implements Cancellable {
     public static HandlerList getHandlerList() {
         return handlers;
     }
-
 }

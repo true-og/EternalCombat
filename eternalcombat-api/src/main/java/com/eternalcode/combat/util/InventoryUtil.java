@@ -1,12 +1,11 @@
 package com.eternalcode.combat.util;
 
-import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.function.ToIntFunction;
+import org.bukkit.inventory.ItemStack;
 
 public class InventoryUtil {
 
@@ -16,7 +15,8 @@ public class InventoryUtil {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
-    public static <T> int calculateItemsToDelete(int percent, Collection<T> objectList, ToIntFunction<? super T> mapper) {
+    public static <T> int calculateItemsToDelete(
+            int percent, Collection<T> objectList, ToIntFunction<? super T> mapper) {
         return MathUtil.getRoundedCountFromPercentage(percent, MathUtil.sum(objectList, mapper));
     }
 
@@ -47,5 +47,4 @@ public class InventoryUtil {
 
         return new RemoveItemResult(currentItems, removedItems);
     }
-
 }

@@ -10,15 +10,15 @@ import com.eternalcode.combat.drop.DropKeepInventoryManager;
 import com.eternalcode.combat.drop.DropManager;
 import com.eternalcode.combat.drop.impl.PercentDropModifier;
 import com.eternalcode.combat.drop.impl.PlayersHealthDropModifier;
+import com.eternalcode.combat.event.EventCaller;
+import com.eternalcode.combat.fight.FightManager;
+import com.eternalcode.combat.fight.FightTask;
+import com.eternalcode.combat.fight.bossbar.FightBossBarService;
 import com.eternalcode.combat.fight.controller.FightActionBlockerController;
 import com.eternalcode.combat.fight.controller.FightMessageController;
 import com.eternalcode.combat.fight.controller.FightTagController;
 import com.eternalcode.combat.fight.controller.FightUnTagController;
 import com.eternalcode.combat.fight.effect.FightEffectController;
-import com.eternalcode.combat.event.EventCaller;
-import com.eternalcode.combat.fight.FightManager;
-import com.eternalcode.combat.fight.FightTask;
-import com.eternalcode.combat.fight.bossbar.FightBossBarService;
 import com.eternalcode.combat.fight.effect.FightEffectService;
 import com.eternalcode.combat.fight.logout.LogoutController;
 import com.eternalcode.combat.fight.logout.LogoutService;
@@ -39,6 +39,9 @@ import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.adventure.platform.LiteBukkitAdventurePlatformFactory;
 import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
 import dev.rollczi.litecommands.bukkit.tools.BukkitPlayerArgument;
+import java.io.File;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 import net.kyori.adventure.platform.AudienceProvider;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -47,10 +50,6 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 public final class CombatPlugin extends JavaPlugin implements EternalCombatApi {
 
@@ -99,54 +98,74 @@ public final class CombatPlugin extends JavaPlugin implements EternalCombatApi {
 
         this.audienceProvider = BukkitAudiences.create(this);
         MiniMessage miniMessage = MiniMessage.builder()
-            .postProcessor(new AdventureLegacyColorPostProcessor())
-            .preProcessor(new AdventureLegacyColorPreProcessor())
-            .build();
+                .postProcessor(new AdventureLegacyColorPostProcessor())
+                .preProcessor(new AdventureLegacyColorPreProcessor())
+                .build();
 
-        FightBossBarService fightBossBarService = new FightBossBarService(this.pluginConfig, this.audienceProvider, miniMessage);
+        FightBossBarService fightBossBarService =
+                new FightBossBarService(this.pluginConfig, this.audienceProvider, miniMessage);
 
-        BridgeService bridgeService = new BridgeService(this.pluginConfig, server.getPluginManager(), this.getLogger(), this);
+        BridgeService bridgeService =
+                new BridgeService(this.pluginConfig, server.getPluginManager(), this.getLogger(), this);
         bridgeService.init(this.fightManager, server);
         this.regionProvider = bridgeService.getRegionProvider();
 
         NotificationAnnouncer notificationAnnouncer = new NotificationAnnouncer(this.audienceProvider, miniMessage);
 
         this.liteCommands = LiteBukkitAdventurePlatformFactory.builder(server, FALLBACK_PREFIX, this.audienceProvider)
-            .argument(Player.class, new BukkitPlayerArgument<>(this.getServer(), this.pluginConfig.messages.playerNotFound))
-            .contextualBind(Player.class, new BukkitOnlyPlayerContextual<>(this.pluginConfig.messages.admin.onlyForPlayers))
+                .argument(
+                        Player.class,
+                        new BukkitPlayerArgument<>(this.getServer(), this.pluginConfig.messages.playerNotFound))
+                .contextualBind(
+                        Player.class, new BukkitOnlyPlayerContextual<>(this.pluginConfig.messages.admin.onlyForPlayers))
+                .invalidUsageHandler(new InvalidUsage(this.pluginConfig, notificationAnnouncer))
+                .permissionHandler(new PermissionMessage(this.pluginConfig, notificationAnnouncer))
+                .commandInstance(
+                        new CombatCommand(this.fightManager, configService, notificationAnnouncer, this.pluginConfig))
+                .commandInstance(new TagOutCommand(this.fightTagOutService, notificationAnnouncer, this.pluginConfig))
+                .register();
 
-            .invalidUsageHandler(new InvalidUsage(this.pluginConfig, notificationAnnouncer))
-            .permissionHandler(new PermissionMessage(this.pluginConfig, notificationAnnouncer))
-
-            .commandInstance(new CombatCommand(this.fightManager, configService, notificationAnnouncer, this.pluginConfig))
-            .commandInstance(new TagOutCommand(this.fightTagOutService, notificationAnnouncer, this.pluginConfig))
-
-            .register();
-
-        FightTask fightTask = new FightTask(server, this.pluginConfig, this.fightManager, fightBossBarService, notificationAnnouncer);
+        FightTask fightTask =
+                new FightTask(server, this.pluginConfig, this.fightManager, fightBossBarService, notificationAnnouncer);
         this.getServer().getScheduler().runTaskTimer(this, fightTask, 20L, 20L);
 
         new Metrics(this, BSTATS_METRICS_ID);
 
         Stream.of(
-            new PercentDropModifier(this.pluginConfig.dropSettings),
-            new PlayersHealthDropModifier(this.pluginConfig.dropSettings, this.logoutService)
-        ).forEach(this.dropManager::registerModifier);
-
+                        new PercentDropModifier(this.pluginConfig.dropSettings),
+                        new PlayersHealthDropModifier(this.pluginConfig.dropSettings, this.logoutService))
+                .forEach(this.dropManager::registerModifier);
 
         Stream.of(
-            new DropController(this.dropManager, this.dropKeepInventoryManager, this.pluginConfig.dropSettings, this.fightManager),
-            new FightTagController(this.fightManager, this.pluginConfig),
-            new LogoutController(this.fightManager, this.logoutService, notificationAnnouncer, this.pluginConfig),
-            new FightUnTagController(this.fightManager, this.pluginConfig, this.logoutService),
-            new FightActionBlockerController(this.fightManager, notificationAnnouncer, this.pluginConfig),
-            new FightPearlController(this.pluginConfig.pearl, notificationAnnouncer, this.fightManager, this.fightPearlManager),
-            new UpdaterNotificationController(updaterService, this.pluginConfig, this.audienceProvider, miniMessage),
-            new RegionController(notificationAnnouncer, this.regionProvider, this.fightManager, this.pluginConfig),
-            new FightEffectController(this.pluginConfig.effect, this.fightEffectService, this.fightManager, this.getServer()),
-            new FightTagOutController(this.fightTagOutService, this.pluginConfig),
-            new FightMessageController(this.fightManager, notificationAnnouncer, fightBossBarService, this.pluginConfig, this.getServer())
-        ).forEach(listener -> this.getServer().getPluginManager().registerEvents(listener, this));
+                        new DropController(
+                                this.dropManager,
+                                this.dropKeepInventoryManager,
+                                this.pluginConfig.dropSettings,
+                                this.fightManager),
+                        new FightTagController(this.fightManager, this.pluginConfig),
+                        new LogoutController(
+                                this.fightManager, this.logoutService, notificationAnnouncer, this.pluginConfig),
+                        new FightUnTagController(this.fightManager, this.pluginConfig, this.logoutService),
+                        new FightActionBlockerController(this.fightManager, notificationAnnouncer, this.pluginConfig),
+                        new FightPearlController(
+                                this.pluginConfig.pearl,
+                                notificationAnnouncer,
+                                this.fightManager,
+                                this.fightPearlManager),
+                        new UpdaterNotificationController(
+                                updaterService, this.pluginConfig, this.audienceProvider, miniMessage),
+                        new RegionController(
+                                notificationAnnouncer, this.regionProvider, this.fightManager, this.pluginConfig),
+                        new FightEffectController(
+                                this.pluginConfig.effect, this.fightEffectService, this.fightManager, this.getServer()),
+                        new FightTagOutController(this.fightTagOutService, this.pluginConfig),
+                        new FightMessageController(
+                                this.fightManager,
+                                notificationAnnouncer,
+                                fightBossBarService,
+                                this.pluginConfig,
+                                this.getServer()))
+                .forEach(listener -> this.getServer().getPluginManager().registerEvents(listener, this));
 
         EternalCombatProvider.initialize(this);
 

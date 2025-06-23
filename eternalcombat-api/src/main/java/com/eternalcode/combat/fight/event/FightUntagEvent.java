@@ -1,10 +1,9 @@
 package com.eternalcode.combat.fight.event;
 
+import java.util.UUID;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-
-import java.util.UUID;
 
 public class FightUntagEvent extends Event implements Cancellable {
 
@@ -21,7 +20,7 @@ public class FightUntagEvent extends Event implements Cancellable {
     public UUID getPlayer() {
         return this.player;
     }
-    
+
     public CauseOfUnTag getCause() {
         return this.cause;
     }

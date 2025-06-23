@@ -1,13 +1,12 @@
 package com.eternalcode.combat.drop;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class Drop {
 
@@ -76,12 +75,7 @@ public class Drop {
         }
 
         public Drop build() {
-            return new Drop(
-              this.player,
-              this.killer,
-              this.droppedItems,
-              this.droppedExp
-            );
+            return new Drop(this.player, this.killer, this.droppedItems, this.droppedExp);
         }
     }
 }

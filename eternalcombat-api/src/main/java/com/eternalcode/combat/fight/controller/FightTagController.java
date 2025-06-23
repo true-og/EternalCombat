@@ -4,6 +4,10 @@ import com.eternalcode.combat.WhitelistBlacklistMode;
 import com.eternalcode.combat.config.implementation.PluginConfig;
 import com.eternalcode.combat.fight.FightManager;
 import com.eternalcode.combat.fight.event.CauseOfTag;
+import java.time.Duration;
+import java.util.List;
+import java.util.UUID;
+import javax.annotation.Nullable;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -12,11 +16,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-
-import javax.annotation.Nullable;
-import java.time.Duration;
-import java.util.List;
-import java.util.UUID;
 
 public class FightTagController implements Listener {
 
@@ -36,7 +35,8 @@ public class FightTagController implements Listener {
 
         List<EntityType> disabledProjectileEntities = this.config.settings.disabledProjectileEntities;
 
-        if (event.getDamager() instanceof Projectile projectile && disabledProjectileEntities.contains(projectile.getType())) {
+        if (event.getDamager() instanceof Projectile projectile
+                && disabledProjectileEntities.contains(projectile.getType())) {
             return;
         }
 
@@ -128,5 +128,4 @@ public class FightTagController implements Listener {
 
         return this.config.settings.worldsToIgnore.contains(worldName);
     }
-
 }

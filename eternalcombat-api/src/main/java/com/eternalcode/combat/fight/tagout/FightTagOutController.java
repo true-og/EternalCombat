@@ -2,10 +2,9 @@ package com.eternalcode.combat.fight.tagout;
 
 import com.eternalcode.combat.config.implementation.PluginConfig;
 import com.eternalcode.combat.fight.event.FightTagEvent;
+import java.util.UUID;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-
-import java.util.UUID;
 
 public class FightTagOutController implements Listener {
 
@@ -25,5 +24,4 @@ public class FightTagOutController implements Listener {
             event.cancel(this.config.messages.admin.adminTagOutCanceled);
         }
     }
-
 }

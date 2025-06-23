@@ -26,5 +26,4 @@ public interface EternalCombatApi {
     DropKeepInventoryManager getDropKeepInventoryManager();
 
     PluginConfig getPluginConfig();
-
 }

@@ -2,10 +2,8 @@ package com.eternalcode.combat.fight.effect;
 
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
-
-import org.bukkit.potion.PotionEffectType;
-
 import java.util.Map;
+import org.bukkit.potion.PotionEffectType;
 
 public class FightEffectSettings extends OkaeriConfig {
 
@@ -19,8 +17,6 @@ public class FightEffectSettings extends OkaeriConfig {
         "# Example: SPEED:1, DAMAGE_RESISTANCE:0",
     })
     public Map<PotionEffectType, Integer> customEffects = Map.of(
-        PotionEffectType.SPEED, 1,
-        PotionEffectType.DAMAGE_RESISTANCE, 0
-    );
-
+            PotionEffectType.SPEED, 1,
+            PotionEffectType.DAMAGE_RESISTANCE, 0);
 }

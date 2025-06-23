@@ -2,17 +2,15 @@ package com.eternalcode.combat.fight.logout;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import org.bukkit.entity.Player;
-
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import org.bukkit.entity.Player;
 
 public class LogoutService {
 
-    private final Cache<UUID, Logout> logouts = CacheBuilder.newBuilder()
-            .expireAfterWrite(1, TimeUnit.MINUTES)
-            .build();
+    private final Cache<UUID, Logout> logouts =
+            CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.MINUTES).build();
 
     public void punishForLogout(Player player) {
         UUID uniqueId = player.getUniqueId();

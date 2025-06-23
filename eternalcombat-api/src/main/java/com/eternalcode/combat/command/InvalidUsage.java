@@ -1,15 +1,13 @@
 package com.eternalcode.combat.command;
 
-
 import com.eternalcode.combat.config.implementation.PluginConfig;
 import com.eternalcode.combat.notification.NotificationAnnouncer;
 import dev.rollczi.litecommands.command.LiteInvocation;
 import dev.rollczi.litecommands.handle.InvalidUsageHandler;
 import dev.rollczi.litecommands.schematic.Schematic;
+import java.util.List;
 import org.bukkit.command.CommandSender;
 import panda.utilities.text.Formatter;
-
-import java.util.List;
 
 public class InvalidUsage implements InvalidUsageHandler<CommandSender> {
 
@@ -26,8 +24,7 @@ public class InvalidUsage implements InvalidUsageHandler<CommandSender> {
         List<String> schematics = scheme.getSchematics();
 
         for (String schematic : schematics) {
-            Formatter formatter = new Formatter()
-                .register("{USAGE}", schematic);
+            Formatter formatter = new Formatter().register("{USAGE}", schematic);
 
             this.announcer.sendMessage(commandSender, formatter.format(this.config.messages.invalidCommandUsage));
         }

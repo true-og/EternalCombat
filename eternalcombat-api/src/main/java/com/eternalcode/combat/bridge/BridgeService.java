@@ -6,11 +6,10 @@ import com.eternalcode.combat.fight.FightManager;
 import com.eternalcode.combat.region.DefaultRegionProvider;
 import com.eternalcode.combat.region.RegionProvider;
 import com.eternalcode.combat.region.WorldGuardRegionProvider;
+import java.util.logging.Logger;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-
-import java.util.logging.Logger;
 
 public class BridgeService {
 
@@ -29,18 +28,20 @@ public class BridgeService {
     }
 
     public void init(FightManager fightManager, Server server) {
-        this.initialize("WorldGuard",
-            () -> this.regionProvider = new WorldGuardRegionProvider(this.pluginConfig.settings.blockedRegions, this.pluginConfig),
-            () -> {
-                this.regionProvider = new DefaultRegionProvider(this.pluginConfig.settings.blockedRegionRadius);
+        this.initialize(
+                "WorldGuard",
+                () -> this.regionProvider =
+                        new WorldGuardRegionProvider(this.pluginConfig.settings.blockedRegions, this.pluginConfig),
+                () -> {
+                    this.regionProvider = new DefaultRegionProvider(this.pluginConfig.settings.blockedRegionRadius);
 
-                this.logger.warning("WorldGuard is not installed, set to default region provider.");
-            });
+                    this.logger.warning("WorldGuard is not installed, set to default region provider.");
+                });
 
-        this.initialize("PlaceholderAPI",
-            () -> new FightTagPlaceholder(fightManager, server, plugin).register(),
-            () -> this.logger.warning("PlaceholderAPI is not installed, placeholders will not be registered.")
-        );
+        this.initialize(
+                "PlaceholderAPI",
+                () -> new FightTagPlaceholder(fightManager, server, plugin).register(),
+                () -> this.logger.warning("PlaceholderAPI is not installed, placeholders will not be registered."));
     }
 
     private void initialize(String pluginName, BridgeInitializer initializer, Runnable failureHandler) {
@@ -48,8 +49,7 @@ public class BridgeService {
             initializer.initialize();
 
             this.logger.info("Successfully initialized " + pluginName + " bridge.");
-        }
-        else {
+        } else {
             failureHandler.run();
         }
     }

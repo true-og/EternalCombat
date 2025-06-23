@@ -11,20 +11,22 @@ import eu.okaeri.configs.schema.GenericsDeclaration;
 import eu.okaeri.configs.serdes.DeserializationData;
 import eu.okaeri.configs.serdes.ObjectSerializer;
 import eu.okaeri.configs.serdes.SerializationData;
+import java.util.Optional;
 import net.kyori.adventure.bossbar.BossBar;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.Optional;
-
 public class NotificationSerializer implements ObjectSerializer<Notification> {
-    
+
     @Override
     public boolean supports(@NonNull Class<? super Notification> type) {
         return Notification.class.isAssignableFrom(type);
     }
 
     @Override
-    public void serialize(@NonNull Notification notification, @NonNull SerializationData data, @NonNull GenericsDeclaration generics) {
+    public void serialize(
+            @NonNull Notification notification,
+            @NonNull SerializationData data,
+            @NonNull GenericsDeclaration generics) {
         data.add("type", notification.type(), NotificationType.class);
         data.add("message", notification.message(), String.class);
 
@@ -48,14 +50,14 @@ public class NotificationSerializer implements ObjectSerializer<Notification> {
             case SUB_TITLE -> new SubTitleNotification(message);
 
             case BOSS_BAR -> {
-                float progress = Optional.ofNullable(data.get("progress", float.class))
-                    .orElse(BossBar.MAX_PROGRESS);
+                float progress =
+                        Optional.ofNullable(data.get("progress", float.class)).orElse(BossBar.MAX_PROGRESS);
 
                 BossBar.Color color = Optional.ofNullable(data.get("color", BossBar.Color.class))
-                    .orElse(BossBar.Color.RED);
+                        .orElse(BossBar.Color.RED);
 
                 BossBar.Overlay overlay = Optional.ofNullable(data.get("overlay", BossBar.Overlay.class))
-                    .orElse(BossBar.Overlay.PROGRESS);
+                        .orElse(BossBar.Overlay.PROGRESS);
 
                 yield new BossBarNotification(message, progress, color, overlay);
             }

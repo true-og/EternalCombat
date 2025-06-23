@@ -8,13 +8,12 @@ import com.eternalcode.combat.notification.Notification;
 import com.eternalcode.combat.notification.implementation.ActionBarNotification;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
-import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
-import org.bukkit.event.entity.EntityDamageEvent;
-
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 public class PluginConfig extends OkaeriConfig {
 
@@ -39,9 +38,7 @@ public class PluginConfig extends OkaeriConfig {
         public Duration combatDuration = Duration.ofSeconds(20);
 
         @Comment("# List of worlds to ignore")
-        public List<String> worldsToIgnore = List.of(
-            "your_world"
-        );
+        public List<String> worldsToIgnore = List.of("your_world");
 
         @Comment("# List of regions to block")
         public List<String> blockedRegions = Collections.singletonList("your_region");
@@ -62,7 +59,8 @@ public class PluginConfig extends OkaeriConfig {
         @Comment("# Release attacker after victim dies?")
         public boolean shouldReleaseAttacker = true;
 
-        @Comment({"# If you want to exclude admins from combat, ",
+        @Comment({
+            "# If you want to exclude admins from combat, ",
             "# Setting this to true - admins cannot be tagged and will not tag other players on hit",
             "# Setting this to false - admins can be tagged and can tag other players on hit"
         })
@@ -76,11 +74,7 @@ public class PluginConfig extends OkaeriConfig {
             "# Based on BLACKLIST mode, all commands in the list are blocked, and all others are allowed",
             "# Based on WHITELIST mode, all commands in the list are allowed, and all others are blocked",
         })
-        public List<String> blockedCommands = List.of(
-            "gamemode",
-            "spawn",
-            "tp"
-        );
+        public List<String> blockedCommands = List.of("gamemode", "spawn", "tp");
 
         @Comment("# Block the use of elytra?")
         public boolean shouldPreventElytraUsage = true;
@@ -97,7 +91,8 @@ public class PluginConfig extends OkaeriConfig {
         @Comment("# Whether to block the placement of blocks?")
         public boolean shouldPreventBlockPlacing = true;
 
-        @Comment({ "# Block the placement of blocks above or below a certain Y coordinate",
+        @Comment({
+            "# Block the placement of blocks above or below a certain Y coordinate",
             "# Select the mode for block placing, available modes: ABOVE, BELOW"
         })
         public BlockPlacingMode blockPlacingMode = BlockPlacingMode.ABOVE;
@@ -134,20 +129,16 @@ public class PluginConfig extends OkaeriConfig {
             "# While using Blacklist mode the player will get a combat log after any damage non-listed below",
         })
         public List<EntityDamageEvent.DamageCause> damageCausesToLog = List.of(
-            EntityDamageEvent.DamageCause.LAVA,
-            EntityDamageEvent.DamageCause.CONTACT,
-            EntityDamageEvent.DamageCause.FIRE,
-            EntityDamageEvent.DamageCause.FIRE_TICK
-        );
+                EntityDamageEvent.DamageCause.LAVA,
+                EntityDamageEvent.DamageCause.CONTACT,
+                EntityDamageEvent.DamageCause.FIRE,
+                EntityDamageEvent.DamageCause.FIRE_TICK);
 
         @Comment({
             "# After what type of projectile entity should not tag the player as fighter?",
             "# You can find a list of all entity types here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html"
         })
-        public List<EntityType> disabledProjectileEntities = List.of(
-            EntityType.ENDER_PEARL
-        );
-
+        public List<EntityType> disabledProjectileEntities = List.of(EntityType.ENDER_PEARL);
     }
 
     @Comment({" ", "# Do you want to change the plugin messages?"})
@@ -197,9 +188,11 @@ public class PluginConfig extends OkaeriConfig {
         @Comment("# Message sent when player tries to open inventory, but the inventory open is blocked")
         public String inventoryBlockedDuringCombat = "&cYou cannot open this inventory during combat!";
 
-        @Comment({"# Message sent when player tries to place a block, but the block place is blocked",
-        "# Placeholder {Y} is replaced with the Y coordinate set in the config",
-        "# Placeholder {MODE} is replaced with the mode set in the config"})
+        @Comment({
+            "# Message sent when player tries to place a block, but the block place is blocked",
+            "# Placeholder {Y} is replaced with the Y coordinate set in the config",
+            "# Placeholder {MODE} is replaced with the mode set in the config"
+        })
         public String blockPlacingBlockedDuringCombat = "&cYou cannot place {MODE} {Y} coordinate during combat!";
 
         @Comment("# Message sent when player tries to enter a region")
@@ -234,10 +227,12 @@ public class PluginConfig extends OkaeriConfig {
             public String adminCannotTagSelf = "&cYou cannot tag yourself!";
 
             @Comment("# Message sent when an admin disables the ability to get tagged for some time")
-            public String adminTagOutSelf = "&7Successfully disabled tag for Yourself! You will be taggable after &e{TIME} ";
+            public String adminTagOutSelf =
+                    "&7Successfully disabled tag for Yourself! You will be taggable after &e{TIME} ";
 
             @Comment("# Message sent when an admin disables the ability to get tagged for some time for other player")
-            public String adminTagOut = "&7Successfully disabled tag for &e{PLAYER}! They will be taggable after &e{TIME} ";
+            public String adminTagOut =
+                    "&7Successfully disabled tag for &e{PLAYER}! They will be taggable after &e{TIME} ";
 
             @Comment("# Message sent to the player whom the ability to get tagged for some time has been disabled")
             public String playerTagOut = "&7You will be taggable in &e{TIME} !";

@@ -13,12 +13,11 @@ import dev.rollczi.litecommands.command.async.Async;
 import dev.rollczi.litecommands.command.execute.Execute;
 import dev.rollczi.litecommands.command.permission.Permission;
 import dev.rollczi.litecommands.command.route.Route;
+import java.time.Duration;
+import java.util.UUID;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import panda.utilities.text.Formatter;
-
-import java.time.Duration;
-import java.util.UUID;
 
 @Route(name = "combatlog", aliases = "combat")
 public class CombatCommand {
@@ -28,7 +27,11 @@ public class CombatCommand {
     private final NotificationAnnouncer announcer;
     private final PluginConfig config;
 
-    public CombatCommand(FightManager fightManager, ConfigService configService, NotificationAnnouncer announcer, PluginConfig config) {
+    public CombatCommand(
+            FightManager fightManager,
+            ConfigService configService,
+            NotificationAnnouncer announcer,
+            PluginConfig config) {
         this.fightManager = fightManager;
         this.configService = configService;
         this.announcer = announcer;
@@ -41,22 +44,22 @@ public class CombatCommand {
         UUID targetUniqueId = target.getUniqueId();
         PluginConfig.Messages messages = this.config.messages;
 
-        Formatter formatter = new Formatter()
-            .register("{PLAYER}", target.getName());
+        Formatter formatter = new Formatter().register("{PLAYER}", target.getName());
 
-        this.announcer.sendMessage(sender, this.fightManager.isInCombat(targetUniqueId)
-            ? formatter.format(messages.admin.playerInCombat)
-            : formatter.format(messages.admin.playerNotInCombat));
+        this.announcer.sendMessage(
+                sender,
+                this.fightManager.isInCombat(targetUniqueId)
+                        ? formatter.format(messages.admin.playerInCombat)
+                        : formatter.format(messages.admin.playerNotInCombat));
     }
 
     @Execute(route = "tag", required = 1)
     @Permission("eternalcombat.tag")
     void tag(CommandSender sender, @Arg Player target) {
-        UUID targetUniqueId = target.getUniqueId(); 
+        UUID targetUniqueId = target.getUniqueId();
         Duration time = this.config.settings.combatDuration;
 
-        Formatter formatter = new Formatter()
-            .register("{PLAYER}", target.getName());
+        Formatter formatter = new Formatter().register("{PLAYER}", target.getName());
 
         FightTagEvent event = this.fightManager.tag(targetUniqueId, time, CauseOfTag.COMMAND);
 
@@ -74,18 +77,19 @@ public class CombatCommand {
     void tagMultiple(CommandSender sender, @Arg Player firstTarget, @Arg Player secondTarget) {
         Duration combatTime = this.config.settings.combatDuration;
         PluginConfig.Messages messages = this.config.messages;
-        
+
         if (sender.equals(firstTarget) || sender.equals(secondTarget)) {
             this.announcer.sendMessage(sender, messages.admin.adminCannotTagSelf);
             return;
         }
 
         FightTagEvent firstTagEvent = this.fightManager.tag(firstTarget.getUniqueId(), combatTime, CauseOfTag.COMMAND);
-        FightTagEvent secondTagEvent = this.fightManager.tag(secondTarget.getUniqueId(), combatTime, CauseOfTag.COMMAND);
+        FightTagEvent secondTagEvent =
+                this.fightManager.tag(secondTarget.getUniqueId(), combatTime, CauseOfTag.COMMAND);
 
         Formatter formatter = new Formatter()
-            .register("{FIRST_PLAYER}", firstTarget.getName())
-            .register("{SECOND_PLAYER}", secondTarget.getName());
+                .register("{FIRST_PLAYER}", firstTarget.getName())
+                .register("{SECOND_PLAYER}", secondTarget.getName());
 
         String format = formatter.format(messages.admin.adminTagMultiplePlayers);
 
@@ -127,8 +131,7 @@ public class CombatCommand {
             return;
         }
 
-        Formatter formatter = new Formatter()
-            .register("{PLAYER}", target.getName());
+        Formatter formatter = new Formatter().register("{PLAYER}", target.getName());
 
         String format = formatter.format(this.config.messages.admin.adminUntagPlayer);
 

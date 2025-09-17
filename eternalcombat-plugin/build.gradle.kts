@@ -1,87 +1,66 @@
-import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
+import xyz.jpenilla.runpaper.task.RunServer
 
 plugins {
-    `eternalcombat-java`
-    `eternalcombat-repositories`
-
-    id("net.minecrell.plugin-yml.bukkit")
-    id("com.gradleup.shadow")
+    java
+    id("com.gradleup.shadow") version "8.3.6"
+    id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
     id("xyz.jpenilla.run-paper")
 }
 
 dependencies {
     implementation(project(":eternalcombat-api"))
 
-    // kyori
-    implementation("net.kyori:adventure-platform-bukkit:${Versions.ADVENTURE_PLATFORM_BUKKIT}")
-    implementation("net.kyori:adventure-text-minimessage:${Versions.ADVENTURE_API}")
-    implementation("net.kyori:adventure-api") {
-        version {
-            strictly(Versions.ADVENTURE_API)
-        }
+    compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
+    compileOnly("com.github.retrooper:packetevents-spigot:2.8.0")
+    compileOnly("me.clip:placeholderapi:2.11.6")
+    compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.3.0-SNAPSHOT") // Import WorldEdit.
+    compileOnly(
+        "com.sk89q.worldguard:worldguard-bukkit:7.0.9"
+    ) { // Import WorldGuard but without its bundled WorldEdit.
+        exclude(group = "com.sk89q.worldedit")
     }
-
-    // litecommands
-    implementation("dev.rollczi:litecommands-bukkit:${Versions.LITE_COMMANDS}")
-
-    // Okaeri configs
-    implementation("eu.okaeri:okaeri-configs-serdes-commons:${Versions.OKAERI_CONFIGS_SERDES_COMMONS}")
-    implementation("eu.okaeri:okaeri-configs-serdes-bukkit:${Versions.OKAERI_CONFIGS_SERDES_BUKKIT}")
-
-    // GitCheck
-    implementation("com.eternalcode:gitcheck:${Versions.GIT_CHECK}")
-
-    // bstats
-    implementation("org.bstats:bstats-bukkit:${Versions.B_STATS_BUKKIT}")
-
-    // caffeine
-    implementation("com.github.ben-manes.caffeine:caffeine:${Versions.CAFFEINE}")
-
-    implementation("com.eternalcode:eternalcode-commons-bukkit:${Versions.ETERNALCODE_COMMONS}")
-    implementation("com.eternalcode:eternalcode-commons-adventure:${Versions.ETERNALCODE_COMMONS}")
-
-    // worldguard
-    compileOnly("com.sk89q.worldguard:worldguard-bukkit:${Versions.WORLD_GUARD_BUKKIT}")
-
-    // PlaceholderAPI
-    compileOnly("me.clip:placeholderapi:${Versions.PLACEHOLDER_API}")
-    
-    // Lands
     compileOnly("com.github.angeschossen:LandsAPI:7.15.20")
 
-    // Multification
-    implementation("com.eternalcode:multification-bukkit:${Versions.MULTIFICATION}")
-    implementation("com.eternalcode:multification-okaeri:${Versions.MULTIFICATION}")
-    compileOnly("com.github.retrooper:packetevents-spigot:${Versions.PACKETS_EVENTS}")
-    implementation("io.papermc:paperlib:${Versions.PAPERLIB}")
+    // EternalCode Commons (split modules)
+    implementation("com.eternalcode:eternalcode-commons-shared:+")
+    implementation("com.eternalcode:eternalcode-commons-bukkit:+")
+    implementation("com.eternalcode:eternalcode-commons-adventure:+")
+
+    // Other libs
+    implementation("net.kyori:adventure-api:4.17.0")
+    implementation("net.kyori:adventure-text-minimessage:4.17.0")
+    implementation("net.kyori:adventure-platform-bukkit:4.3.3")
+    implementation("dev.rollczi:litecommands-bukkit:3.10.5")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
+    implementation("org.bstats:bstats-bukkit:3.0.2")
+    implementation("io.papermc:paperlib:1.0.8")
+
+    implementation("com.eternalcode:multification-bukkit:1.2.2")
+    implementation("com.eternalcode:multification-okaeri:1.1.4")
+    implementation("com.eternalcode:gitcheck:1.0.0")
+
+    implementation("eu.okaeri:okaeri-configs-core:5.0.9")
+    implementation("eu.okaeri:okaeri-configs-yaml-snakeyaml:5.0.9")
+    implementation("eu.okaeri:okaeri-configs-yaml-bukkit:5.0.9")
+    implementation("eu.okaeri:okaeri-configs-serdes-commons:5.0.9")
+    implementation("eu.okaeri:okaeri-configs-serdes-bukkit:5.0.9")
 }
+
+java { toolchain { languageVersion.set(JavaLanguageVersion.of(17)) } }
 
 bukkit {
-    main = "com.eternalcode.combat.CombatPlugin"
-    author = "EternalCodeTeam"
-    apiVersion = "1.13"
-    prefix = "EternalCombat"
     name = "EternalCombat"
-    load = BukkitPluginDescription.PluginLoadOrder.POSTWORLD
-    softDepend = listOf(
-        "Lands"
-    )
-    depend = listOf(
-        "packetevents",
-    )
-    version = "${project.version}"
+    main = "com.eternalcode.combat.CombatPlugin"
+    version = project.version.toString()
+    apiVersion = "1.19"
+    authors = listOf("EternalCodeTeam")
+    prefix = "EternalCombat"
+    softDepend = listOf("Lands")
+    depend = listOf("packetevents")
 }
 
-tasks {
-    runServer {
-        minecraftVersion("1.21.4")
-        downloadPlugins.url("https://github.com/retrooper/packetevents/releases/download/v2.8.0/packetevents-spigot-2.8.0.jar")
-    }
-}
-
-tasks.shadowJar {
+tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
     archiveFileName.set("EternalCombat v${project.version}.jar")
-
     exclude(
         "org/intellij/lang/annotations/**",
         "org/jetbrains/annotations/**",
@@ -89,9 +68,8 @@ tasks.shadowJar {
         "kotlin/**",
         "javax/**",
         "org/checkerframework/**",
-        "com/google/errorprone/**",
+        "com/google/errorprone/**"
     )
-
     val prefix = "com.eternalcode.combat.libs"
     listOf(
         "eu.okaeri",
@@ -105,7 +83,13 @@ tasks.shadowJar {
         "com.eternalcode.commons",
         "com.eternalcode.multification",
         "io.papermc"
-    ).forEach { pack ->
-        relocate(pack, "$prefix.$pack")
+    ).forEach { relocate(it, "$prefix.$it") }
+}
+
+tasks.named<RunServer>("runServer") {
+    minecraftVersion("1.19.4")
+    downloadPlugins {
+        url("https://github.com/retrooper/packetevents/releases/download/v2.8.0/packetevents-spigot-2.8.0.jar")
     }
 }
+

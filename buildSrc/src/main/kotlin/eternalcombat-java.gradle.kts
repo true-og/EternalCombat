@@ -8,9 +8,9 @@ version = "2.3.0-SNAPSHOT"
 tasks.compileJava {
     options.compilerArgs = listOf("-Xlint:deprecation", "-parameters")
     options.encoding = "UTF-8"
-    options.release = 21
+    options.release = 17
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }

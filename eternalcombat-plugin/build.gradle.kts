@@ -56,7 +56,7 @@ bukkit {
     authors = listOf("EternalCodeTeam")
     prefix = "EternalCombat"
     softDepend = listOf("Lands")
-    depend = listOf("packetevents")
+    depend = listOf("PacketEvents-OG")
 }
 
 tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {

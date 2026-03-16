@@ -4,6 +4,21 @@ plugins {
     id("xyz.jpenilla.run-paper") version "2.2.3" apply false
 }
 
+tasks.jar {
+    enabled = false
+}
+
+val pluginJar by tasks.registering(Copy::class) {
+    dependsOn(":eternalcombat-plugin:shadowJar")
+    from(layout.projectDirectory.file("eternalcombat-plugin/build/libs/EternalCombat v${project.version}.jar"))
+    into(layout.buildDirectory.dir("libs"))
+    rename { "EternalCombat-${project.version}.jar" }
+}
+
+tasks.assemble {
+    dependsOn(pluginJar)
+}
+
 allprojects {
     group = "com.eternalcode"
     version = "2.2.0"
@@ -30,4 +45,3 @@ subprojects {
         options.release.set(17)
     }
 }
-

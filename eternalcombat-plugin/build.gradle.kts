@@ -93,6 +93,13 @@ configurations.all {
     }
 }
 
+
+sourceSets {
+    main {
+        resources.srcDir("src/resources")
+    }
+}
+
 dependencies {
     implementation(project(":eternalcombat-api"))
 

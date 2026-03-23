@@ -39,7 +39,6 @@ public class ConfigService {
 
         configFile.withBindFile(file);
         configFile.withRemoveOrphans(true);
-        configFile.saveDefaults();
         configFile.load(true);
 
         this.configs.add(configFile);

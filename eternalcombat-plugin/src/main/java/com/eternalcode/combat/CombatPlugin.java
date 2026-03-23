@@ -6,47 +6,47 @@ import com.eternalcode.combat.border.BorderServiceImpl;
 import com.eternalcode.combat.border.animation.block.BorderBlockController;
 import com.eternalcode.combat.border.animation.particle.ParticleController;
 import com.eternalcode.combat.bridge.BridgeService;
-import com.eternalcode.combat.crystalpvp.RespawnAnchorListener;
+import com.eternalcode.combat.config.ConfigService;
+import com.eternalcode.combat.config.implementation.PluginConfig;
 import com.eternalcode.combat.crystalpvp.EndCrystalListener;
+import com.eternalcode.combat.crystalpvp.RespawnAnchorListener;
+import com.eternalcode.combat.event.EventManager;
+import com.eternalcode.combat.fight.FightManager;
+import com.eternalcode.combat.fight.FightManagerImpl;
+import com.eternalcode.combat.fight.FightTagCommand;
+import com.eternalcode.combat.fight.FightTask;
+import com.eternalcode.combat.fight.controller.FightActionBlockerController;
 import com.eternalcode.combat.fight.controller.FightBypassAdminController;
 import com.eternalcode.combat.fight.controller.FightBypassCreativeController;
 import com.eternalcode.combat.fight.controller.FightBypassPermissionController;
-import com.eternalcode.combat.fight.drop.DropKeepInventoryService;
-import com.eternalcode.combat.fight.FightManager;
-import com.eternalcode.combat.fight.drop.DropService;
-import com.eternalcode.combat.fight.effect.FightEffectService;
-import com.eternalcode.combat.fight.firework.FireworkController;
-import com.eternalcode.combat.fight.knockback.KnockbackService;
-import com.eternalcode.combat.fight.tagout.FightTagOutService;
-import com.eternalcode.combat.fight.pearl.FightPearlService;
-import com.eternalcode.combat.handler.InvalidUsageHandlerImpl;
-import com.eternalcode.combat.handler.MissingPermissionHandlerImpl;
-import com.eternalcode.combat.config.ConfigService;
-import com.eternalcode.combat.config.implementation.PluginConfig;
-import com.eternalcode.combat.fight.drop.DropController;
-import com.eternalcode.combat.fight.drop.DropKeepInventoryServiceImpl;
-import com.eternalcode.combat.fight.drop.DropServiceImpl;
-import com.eternalcode.combat.fight.drop.impl.PercentDropModifier;
-import com.eternalcode.combat.fight.drop.impl.PlayersHealthDropModifier;
-import com.eternalcode.combat.fight.FightTagCommand;
-import com.eternalcode.combat.fight.controller.FightActionBlockerController;
 import com.eternalcode.combat.fight.controller.FightMessageController;
 import com.eternalcode.combat.fight.controller.FightTagController;
 import com.eternalcode.combat.fight.controller.FightUnTagController;
+import com.eternalcode.combat.fight.drop.DropController;
+import com.eternalcode.combat.fight.drop.DropKeepInventoryService;
+import com.eternalcode.combat.fight.drop.DropKeepInventoryServiceImpl;
+import com.eternalcode.combat.fight.drop.DropService;
+import com.eternalcode.combat.fight.drop.DropServiceImpl;
+import com.eternalcode.combat.fight.drop.impl.PercentDropModifier;
+import com.eternalcode.combat.fight.drop.impl.PlayersHealthDropModifier;
 import com.eternalcode.combat.fight.effect.FightEffectController;
-import com.eternalcode.combat.event.EventManager;
-import com.eternalcode.combat.fight.FightManagerImpl;
-import com.eternalcode.combat.fight.FightTask;
+import com.eternalcode.combat.fight.effect.FightEffectService;
 import com.eternalcode.combat.fight.effect.FightEffectServiceImpl;
+import com.eternalcode.combat.fight.firework.FireworkController;
+import com.eternalcode.combat.fight.knockback.KnockbackRegionController;
+import com.eternalcode.combat.fight.knockback.KnockbackService;
 import com.eternalcode.combat.fight.logout.LogoutController;
 import com.eternalcode.combat.fight.logout.LogoutService;
 import com.eternalcode.combat.fight.pearl.FightPearlController;
+import com.eternalcode.combat.fight.pearl.FightPearlService;
 import com.eternalcode.combat.fight.pearl.FightPearlServiceImpl;
-import com.eternalcode.combat.fight.tagout.FightTagOutController;
-import com.eternalcode.combat.fight.tagout.FightTagOutServiceImpl;
 import com.eternalcode.combat.fight.tagout.FightTagOutCommand;
+import com.eternalcode.combat.fight.tagout.FightTagOutController;
+import com.eternalcode.combat.fight.tagout.FightTagOutService;
+import com.eternalcode.combat.fight.tagout.FightTagOutServiceImpl;
+import com.eternalcode.combat.handler.InvalidUsageHandlerImpl;
+import com.eternalcode.combat.handler.MissingPermissionHandlerImpl;
 import com.eternalcode.combat.notification.NoticeService;
-import com.eternalcode.combat.fight.knockback.KnockbackRegionController;
 import com.eternalcode.combat.region.RegionProvider;
 import com.eternalcode.combat.updater.UpdaterNotificationController;
 import com.eternalcode.combat.updater.UpdaterService;
@@ -58,7 +58,10 @@ import com.google.common.base.Stopwatch;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
 import dev.rollczi.litecommands.bukkit.LiteBukkitMessages;
+import java.io.File;
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 import net.kyori.adventure.platform.AudienceProvider;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -68,13 +71,10 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
-
 public final class CombatPlugin extends JavaPlugin implements EternalCombatApi {
 
     private static final String FALLBACK_PREFIX = "eternalcombat";
+    private static final String CONFIG_RESOURCE_PATH = "config.yml";
 
     private FightManager fightManager;
     private FightPearlService fightPearlService;
@@ -96,11 +96,15 @@ public final class CombatPlugin extends JavaPlugin implements EternalCombatApi {
         Server server = this.getServer();
 
         File dataFolder = this.getDataFolder();
+        File configFile = new File(dataFolder, CONFIG_RESOURCE_PATH);
+        if (!configFile.exists()) {
+            this.saveResource(CONFIG_RESOURCE_PATH, false);
+        }
 
         ConfigService configService = new ConfigService();
 
         EventManager eventManager = new EventManager(this);
-        PluginConfig pluginConfig = configService.create(PluginConfig.class, new File(dataFolder, "config.yml"));
+        PluginConfig pluginConfig = configService.create(PluginConfig.class, configFile);
 
         MinecraftScheduler scheduler = CombatSchedulerAdapter.getAdaptiveScheduler(this);
 
@@ -218,6 +222,7 @@ public final class CombatPlugin extends JavaPlugin implements EternalCombatApi {
 
         this.fightManager.untagAll();
     }
+
 
     @Override
     public FightManager getFightManager() {

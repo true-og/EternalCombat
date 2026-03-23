@@ -184,7 +184,7 @@ tasks {
 }
 
 tasks.shadowJar {
-    archiveFileName.set("EternalCombat v${project.version}.jar")
+    archiveFileName.set("EternalCombat-${project.version}.jar")
 
     exclude(
         "org/intellij/lang/annotations/**",

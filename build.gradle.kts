@@ -7,11 +7,12 @@ tasks.jar {
     enabled = false
 }
 
-val pluginShadowJar = project(":eternalcombat-plugin").tasks.named("shadowJar")
-
+val pluginProject = project(":eternalcombat-plugin")
 val pluginJar by tasks.registering(Copy::class) {
-    dependsOn(pluginShadowJar)
-    from(pluginShadowJar)
+    dependsOn(":eternalcombat-plugin:shadowJar")
+    from(pluginProject.provider {
+        pluginProject.layout.buildDirectory.file("libs/EternalCombat-${pluginProject.version}.jar").get().asFile
+    })
     into(layout.buildDirectory.dir("libs"))
 }
 

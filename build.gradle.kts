@@ -1,7 +1,6 @@
 plugins {
     java
     eclipse
-    id("xyz.jpenilla.run-paper") version "2.2.3" apply false
 }
 
 tasks.jar {

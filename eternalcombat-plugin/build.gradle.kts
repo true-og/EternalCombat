@@ -173,7 +173,7 @@ bukkit {
         "WorldGuard"
     )
     depend = listOf(
-        "PacketEvents-OG",
+        "PacketEvents",
     )
     version = "${project.version}"
 

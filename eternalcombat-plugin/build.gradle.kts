@@ -104,7 +104,7 @@ dependencies {
     implementation(project(":eternalcombat-api"))
 
     compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
-    compileOnly("com.github.retrooper:packetevents-spigot:2.8.0")
+    //compileOnly("com.github.retrooper:packetevents-spigot:2.8.0")
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.3.0-SNAPSHOT") // Import WorldEdit.
     compileOnly(

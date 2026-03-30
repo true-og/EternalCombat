@@ -119,8 +119,6 @@ dependencies {
             strictly(Versions.ADVENTURE_API)
         }
     }
-    compileOnly("com.github.angeschossen:LandsAPI:7.15.20")
-
     // litecommands
     implementation("dev.rollczi:litecommands-bukkit:${Versions.LITE_COMMANDS}")
 
@@ -142,9 +140,6 @@ dependencies {
     // PlaceholderAPI
     compileOnly("me.clip:placeholderapi:${Versions.PLACEHOLDER_API}")
     
-    // Lands
-    compileOnly("com.github.angeschossen:LandsAPI:${Versions.LANDS_API}")
-
     // Multification
     implementation("com.eternalcode:multification-bukkit:${Versions.MULTIFICATION}")
     implementation("com.eternalcode:multification-okaeri:${Versions.MULTIFICATION}")
@@ -168,7 +163,6 @@ bukkit {
     name = "EternalCombat"
     load = BukkitPluginDescription.PluginLoadOrder.POSTWORLD
     softDepend = listOf(
-        "Lands",
         "WorldGuard"
     )
     depend = listOf(

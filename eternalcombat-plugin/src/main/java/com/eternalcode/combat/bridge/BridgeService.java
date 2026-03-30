@@ -1,6 +1,5 @@
 package com.eternalcode.combat.bridge;
 
-import com.eternalcode.combat.region.lands.LandsRegionProvider;
 import com.eternalcode.combat.bridge.placeholder.FightTagPlaceholder;
 import com.eternalcode.combat.config.implementation.PluginConfig;
 import com.eternalcode.combat.fight.FightManager;
@@ -42,12 +41,6 @@ public class BridgeService {
 
     public void init(Server server) {
         List<RegionProvider> providers = new ArrayList<>();
-
-        this.initialize(
-            "Lands",
-            () -> providers.add(new LandsRegionProvider(plugin)),
-            () -> this.logger.warning("Lands not found; skipping LandsRegionProvider.")
-        );
 
         this.initialize(
             "WorldGuard",

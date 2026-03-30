@@ -24,7 +24,6 @@ object Versions {
     const val WORLD_GUARD_BUKKIT = "7.0.8"
 
     const val PLACEHOLDER_API = "2.11.7"
-    const val LANDS_API = "7.23.1"
     const val PAPERLIB = "1.0.8"
 
     const val WORLDEDIT = "3ISh7ADm" //cannot use numeric version bc of duplicated version on modrinth
@@ -32,7 +31,6 @@ object Versions {
     const val LUCKPERMS = "5.5.17"
 
 }
-
 
 
 

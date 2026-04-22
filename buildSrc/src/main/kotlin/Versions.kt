@@ -2,13 +2,13 @@ object Versions {
 
     const val SPIGOT_API = "1.17.1-R0.1-SNAPSHOT"
 
-    const val JUNIT_JUPITER_API = "6.0.2"
-    const val JUNIT_JUPITER_PARAMS = "6.0.2"
-    const val JUNIT_JUPITER_ENGINE = "6.0.2"
+    const val JUNIT_JUPITER_API = "6.0.3"
+    const val JUNIT_JUPITER_PARAMS = "6.0.3"
+    const val JUNIT_JUPITER_ENGINE = "6.0.3"
 
-    const val JETBRAINS_ANNOTATIONS = "26.0.2-1"
+    const val JETBRAINS_ANNOTATIONS = "26.1.0"
 
-    const val ETERNALCODE_COMMONS = "1.3.2"
+    const val ETERNALCODE_COMMONS = "1.3.4"
     const val MULTIFICATION = "1.2.4"
     const val PACKETEVENTS = "2.11.2"
 
@@ -18,6 +18,8 @@ object Versions {
     const val LITE_COMMANDS = "3.10.9"
     const val OKAERI_CONFIGS_SERDES_COMMONS = "5.0.13"
     const val OKAERI_CONFIGS_SERDES_BUKKIT = "5.0.13"
+
+    const val XSERIES = "13.6.0"
 
     const val CAFFEINE = "3.2.3"
 
@@ -31,6 +33,5 @@ object Versions {
     const val LUCKPERMS = "5.5.17"
 
 }
-
 
 

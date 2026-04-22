@@ -19,6 +19,9 @@ import com.eternalcode.combat.fight.controller.FightActionBlockerController;
 import com.eternalcode.combat.fight.controller.FightBypassAdminController;
 import com.eternalcode.combat.fight.controller.FightBypassCreativeController;
 import com.eternalcode.combat.fight.controller.FightBypassPermissionController;
+import com.eternalcode.combat.fight.controller.FightInventoryController;
+import com.eternalcode.combat.fight.death.DeathFlareController;
+import com.eternalcode.combat.fight.death.DeathLightningController;
 import com.eternalcode.combat.fight.controller.FightMessageController;
 import com.eternalcode.combat.fight.controller.FightTagController;
 import com.eternalcode.combat.fight.controller.FightUnTagController;
@@ -96,15 +99,11 @@ public final class CombatPlugin extends JavaPlugin implements EternalCombatApi {
         Server server = this.getServer();
 
         File dataFolder = this.getDataFolder();
-        File configFile = new File(dataFolder, CONFIG_RESOURCE_PATH);
-        if (!configFile.exists()) {
-            this.saveResource(CONFIG_RESOURCE_PATH, false);
-        }
 
         ConfigService configService = new ConfigService();
 
         EventManager eventManager = new EventManager(this);
-        PluginConfig pluginConfig = configService.create(PluginConfig.class, configFile);
+        PluginConfig pluginConfig = configService.create(PluginConfig.class, new File(dataFolder, CONFIG_RESOURCE_PATH));
 
         MinecraftScheduler scheduler = CombatSchedulerAdapter.getAdaptiveScheduler(this);
 
@@ -177,6 +176,8 @@ public final class CombatPlugin extends JavaPlugin implements EternalCombatApi {
             new FightBypassCreativeController(server, pluginConfig),
             new FightActionBlockerController(this.fightManager, noticeService, pluginConfig, server),
             new FightPearlController(pluginConfig.pearl, noticeService, this.fightManager, this.fightPearlService),
+            new DeathFlareController(pluginConfig, server, scheduler, this),
+            new DeathLightningController(pluginConfig, server),
             new UpdaterNotificationController(updaterService, pluginConfig, this.audienceProvider, miniMessage),
             new KnockbackRegionController(noticeService, this.regionProvider, this.fightManager, knockbackService, server),
             new FightEffectController(pluginConfig.effect, this.fightEffectService, this.fightManager, server),
@@ -187,7 +188,8 @@ public final class CombatPlugin extends JavaPlugin implements EternalCombatApi {
             new BorderBlockController(borderService, () -> pluginConfig.border.block, scheduler, server),
             new EndCrystalListener(this, this.fightManager, pluginConfig),
             new RespawnAnchorListener(this, this.fightManager, pluginConfig),
-            new FireworkController(this.fightManager, pluginConfig, noticeService)
+            new FireworkController(this.fightManager, pluginConfig, noticeService),
+            new FightInventoryController(this.fightManager, pluginConfig, noticeService)
         );
 
         eventManager.subscribe(
@@ -222,8 +224,6 @@ public final class CombatPlugin extends JavaPlugin implements EternalCombatApi {
 
         this.fightManager.untagAll();
     }
-
-
     @Override
     public FightManager getFightManager() {
         return this.fightManager;

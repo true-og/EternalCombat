@@ -1,6 +1,5 @@
 import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
 import io.papermc.hangarpublishplugin.model.Platforms
-
 plugins {
     `eternalcombat-java`
     `eternalcombat-repositories`
@@ -8,7 +7,7 @@ plugins {
     id("net.minecrell.plugin-yml.bukkit")
     id("com.gradleup.shadow")
     id("xyz.jpenilla.run-paper")
-    id("com.modrinth.minotaur") version "2.8.10"
+    id("com.modrinth.minotaur") version "2.9.0"
     id("io.papermc.hangar-publish-plugin") version "0.1.4"
 }
 
@@ -126,6 +125,8 @@ dependencies {
     implementation("eu.okaeri:okaeri-configs-serdes-commons:${Versions.OKAERI_CONFIGS_SERDES_COMMONS}")
     implementation("eu.okaeri:okaeri-configs-serdes-bukkit:${Versions.OKAERI_CONFIGS_SERDES_BUKKIT}")
 
+    // XSeries
+    implementation("com.github.cryptomorin:XSeries:${Versions.XSERIES}")
     // caffeine
     implementation("com.github.ben-manes.caffeine:caffeine:${Versions.CAFFEINE}")
 
@@ -139,7 +140,7 @@ dependencies {
 
     // PlaceholderAPI
     compileOnly("me.clip:placeholderapi:${Versions.PLACEHOLDER_API}")
-    
+
     // Multification
     implementation("com.eternalcode:multification-bukkit:${Versions.MULTIFICATION}")
     implementation("com.eternalcode:multification-okaeri:${Versions.MULTIFICATION}")
@@ -208,7 +209,8 @@ tasks.shadowJar {
         "com.github.benmanes.caffeine",
         "com.eternalcode.commons",
         "com.eternalcode.multification",
-        "io.papermc.lib"
+        "com.github.cryptomorin",
+        "io.papermc.lib",
     ).forEach { pack ->
         relocate(pack, "$prefix.$pack")
     }

@@ -4,6 +4,10 @@ public final class EternalCombatProvider {
 
     private static EternalCombatApi ETERNAL_COMBAT_API;
 
+    static boolean isInitialized() {
+        return ETERNAL_COMBAT_API != null;
+    }
+
     public static EternalCombatApi provide() {
         if (ETERNAL_COMBAT_API == null) {
             throw new IllegalStateException("EternalCombatApi has not been initialized yet!");

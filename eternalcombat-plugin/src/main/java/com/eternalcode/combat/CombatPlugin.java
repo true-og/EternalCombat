@@ -99,11 +99,16 @@ public final class CombatPlugin extends JavaPlugin implements EternalCombatApi {
         Server server = this.getServer();
 
         File dataFolder = this.getDataFolder();
+        File configFile = new File(dataFolder, CONFIG_RESOURCE_PATH);
+
+        if (!configFile.exists()) {
+            this.saveResource(CONFIG_RESOURCE_PATH, false);
+        }
 
         ConfigService configService = new ConfigService();
 
         EventManager eventManager = new EventManager(this);
-        PluginConfig pluginConfig = configService.create(PluginConfig.class, new File(dataFolder, CONFIG_RESOURCE_PATH));
+        PluginConfig pluginConfig = configService.create(PluginConfig.class, configFile);
 
         MinecraftScheduler scheduler = CombatSchedulerAdapter.getAdaptiveScheduler(this);
 
@@ -212,7 +217,9 @@ public final class CombatPlugin extends JavaPlugin implements EternalCombatApi {
 
     @Override
     public void onDisable() {
-        EternalCombatProvider.deinitialize();
+        if (EternalCombatProvider.isInitialized()) {
+            EternalCombatProvider.deinitialize();
+        }
 
         if (this.liteCommands != null) {
             this.liteCommands.unregister();
@@ -222,7 +229,9 @@ public final class CombatPlugin extends JavaPlugin implements EternalCombatApi {
             this.audienceProvider.close();
         }
 
-        this.fightManager.untagAll();
+        if (this.fightManager != null) {
+            this.fightManager.untagAll();
+        }
     }
     @Override
     public FightManager getFightManager() {
